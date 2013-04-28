@@ -118,6 +118,7 @@ try
 	bcm2835_gpio_write(GREEN4, HIGH);
 	leds.push_back(GREEN4);
 	bcm2835_gpio_fsel(BUTTON, BCM2835_GPIO_FSEL_INPT);
+	bcm2835_gpio_set_pud(BUTTON, BCM2835_GPIO_PUD_UP);
 	uint8_t old_button_stat = HIGH;
 	Mode mode = SINGLE;
 	std::vector<uint8_t>::iterator led_on = leds.begin();
@@ -175,12 +176,12 @@ try
 }
 catch(const std::exception& er)
 {
-	std::cerr << argv[0] << " : " << er.what() << std::endl;
+	std::cerr << argv[0] << ": " << er.what() << std::endl;
 	return EXIT_FAILURE;
 }
 catch(...)
 {
-	std::cerr << argv[0] << " : " << "Unknown error" << std::endl;
+	std::cerr << argv[0] << ": " << "Unknown error" << std::endl;
 	return EXIT_FAILURE;
 }
 
