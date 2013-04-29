@@ -12,6 +12,7 @@
 #include <vector>
 #include <signal.h>
 #include <bcm2835.h>
+#include <tr1/memory>
 #include "common.h"
 
 volatile bool work = true;
@@ -76,10 +77,10 @@ try
 	bcm2835_gpio_fsel(BUTTON, BCM2835_GPIO_FSEL_INPT);
 	bcm2835_gpio_set_pud(BUTTON, BCM2835_GPIO_PUD_UP);
 	uint8_t old_button_stat = HIGH;
-	mode_1 *mode1 = new mode_1(leds);
-	mode_2 *mode2 = new mode_2(leds);
-	mode_3 *mode3 = new mode_3(leds);
-	mode *blink = mode1;
+	std::tr1::shared_ptr<mode_1> mode1(new mode_1(leds));
+	std::tr1::shared_ptr<mode_2> mode2(new mode_2(leds));
+	std::tr1::shared_ptr<mode_3> mode3(new mode_3(leds));
+	std::tr1::shared_ptr<mode> blink = mode1;
 	blink->init();
 	Mode mode = MODE_1;
 	while(work)
@@ -109,9 +110,6 @@ try
 		bcm2835_delay(100);
 	}
 	blink->set_all(HIGH);
-	delete mode1;
-	delete mode2;
-	delete mode3;
 	bcm2835_close();
 	return EXIT_SUCCESS;
 }
